@@ -17,9 +17,7 @@ router.get('/', function (req: Request, res: Response, next: Function) {
     const name = moment().format("DD-MM-YY-HH:MM:SS:SSS");
     console.log(name);
     const filePath = path.join(CHANGES_PATH ,`${name}.json`);
-    jsonfile.writeFileSync(filePath, req.query, function (err: Error) {
-        console.error(err);
-    });
+    jsonfile.writeFileSync(filePath, req.query);
     res.json(req.query);
 });
 
