@@ -1,2 +1,7 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<p>Mail chimp changes:</p>
+<ol>
+    {{#each files}}
+        <li><a href="/{{this.href}}">{{this.name}}</a></li>
+    {{/each}}
+</ol>
