@@ -9,20 +9,20 @@ var path = require('path');
 const fs = require('fs');
 const PUBLIC_FOLDER = '/public';
 const CHANGES_FOLDER = 'changes';
-const CHANGES_PATH = path.join(__dirname, '..',PUBLIC_FOLDER, CHANGES_FOLDER);
-
+const CHANGES_PATH = path.join(__dirname, '..', PUBLIC_FOLDER, CHANGES_FOLDER);
+const DATE_FORMAT = "YYYY-MM-DD-HH:MM:SS:SSS";
 
 /* GET home page. */
 router.get('/', function (req: Request, res: Response, next: Function) {
-    const name = moment().format("DD-MM-YY-HH:MM:SS:SSS");
-    const filePath = path.join(CHANGES_PATH ,`${name}.json`);
+    const name = moment().format(DATE_FORMAT);
+    const filePath = path.join(CHANGES_PATH, `${name}.json`);
     jsonfile.writeFileSync(filePath, req.query);
     res.json(req.query);
 });
 
 router.post('/', function (req: Request, res: Response, next: Function) {
-    const name = moment().format("DD-MM-YY-HH:MM:SS:SSS");
-    const filePath = path.join(CHANGES_PATH ,`${name}.json`);
+    const name = moment().format(DATE_FORMAT);
+    const filePath = path.join(CHANGES_PATH, `${name}.json`);
     jsonfile.writeFileSync(filePath, req.body);
     res.json(req.body);
 });
@@ -30,13 +30,20 @@ router.post('/', function (req: Request, res: Response, next: Function) {
 
 router.get('/changes', function (req: Request, res: Response, next: Function) {
     const files = [];
+
     fs.readdirSync(CHANGES_PATH).forEach(file => {
-        files.push({
-            name:file,
-            href: path.join(CHANGES_FOLDER, file)
-        });
+        files.push(file);
     });
-    res.render('index', { files: files });
+
+    res.render('index', {
+        files: files.sort().reduce((acc, file) => {
+            acc.push({
+                name: file,
+                href: path.join(CHANGES_FOLDER, file)
+            });
+            return acc;
+        }, [])
+    });
 });
 
 module.exports = router;
