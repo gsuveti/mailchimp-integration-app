@@ -15,10 +15,16 @@ const CHANGES_PATH = path.join(__dirname, '..',PUBLIC_FOLDER, CHANGES_FOLDER);
 /* GET home page. */
 router.get('/', function (req: Request, res: Response, next: Function) {
     const name = moment().format("DD-MM-YY-HH:MM:SS:SSS");
-    console.log(name);
     const filePath = path.join(CHANGES_PATH ,`${name}.json`);
     jsonfile.writeFileSync(filePath, req.query);
     res.json(req.query);
+});
+
+router.post('/', function (req: Request, res: Response, next: Function) {
+    const name = moment().format("DD-MM-YY-HH:MM:SS:SSS");
+    const filePath = path.join(CHANGES_PATH ,`${name}.json`);
+    jsonfile.writeFileSync(filePath, req.body);
+    res.json(req.body);
 });
 
 
